@@ -73,4 +73,4 @@ for crl in os.listdir(args.d):
         for revoked in crlp.get_revoked():
             o['revoked'].append({'serial':revoked.get_serial(), 'rev_date':revoked.get_rev_date(), 'reason':revoked.get_reason()})
     if args.j:
-        print json.dumps(o)
+        print json.dumps(o, ensure_ascii=False)
