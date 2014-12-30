@@ -1,3 +1,5 @@
 M2Crypto
 requests
 PyOpenSSL
+pyasn1_modules
+pyasn1
