@@ -3,3 +3,5 @@ requests
 PyOpenSSL
 pyasn1_modules
 pyasn1
+redis
+netaddr
