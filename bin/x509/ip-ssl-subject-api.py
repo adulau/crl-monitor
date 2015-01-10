@@ -11,6 +11,7 @@ import redis
 import sys
 import netaddr
 import json
+import re
 
 import tornado.httpserver
 import tornado.ioloop
@@ -33,6 +34,11 @@ class SSLQueryHandler(tornado.web.RequestHandler):
         subnets = [input]
         out = {}
         for subnet in subnets:
+            if re.findall(r":", subnet):
+                self.clear()
+                self.set_status(400)
+                self.finish('IPv6 is not (yet) supported')
+                continue
             try:
                 iplist = netaddr.IPNetwork(subnet)
             except:
