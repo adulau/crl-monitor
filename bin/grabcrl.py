@@ -45,7 +45,7 @@ for url in fileinput.input(args.r):
     except Exception, err:
         if args.v:
             print err
-            continue
+        continue
     if r.status_code >= 200 and r.status_code <= 299:
         with open (os.path.join(storepath,hurl), 'w') as f:
             f.write(r.content)
