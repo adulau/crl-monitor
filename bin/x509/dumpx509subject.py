@@ -65,6 +65,8 @@ for cert in fileinput.input(args.r):
             f = open(fn, 'w+')
             f.write(certb)
             f.close()
+            if args.v:
+                print "Certificate saved in " +fn
 
     try:
         x509 = X509.load_cert_string(certb, X509.FORMAT_DER)
