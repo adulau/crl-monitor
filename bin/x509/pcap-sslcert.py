@@ -34,10 +34,11 @@ for l in fileinput.input(args.r):
         cert = None
     if flow.search(l):
         m = flow.match(l)
-        session = m.group(1)
-        srcip = m.group(2)
-        dstip = m.group(3)
-        dstport = m.group(4)
+        if m is not None:
+            session = m.group(1)
+            srcip = m.group(2)
+            dstip = m.group(3)
+            dstport = m.group(4)
 
     if (cert is True):
         certstring += l.rstrip('\n')
