@@ -15,11 +15,14 @@ import OpenSSL
 cert = None
 certstring = ""
 
+certtag = re.compile('^\s+Certificate\s*$')
+certtagend = re.compile('^\S+')
+
 for l in fileinput.input():
-    if re.match('^\s+Certificate\s*$', l):
+    if certtag.match(l):
         cert = True
         continue
-    elif re.match('^\S+', l):
+    elif certtagend.match(l):
         cert = None
 
     if (cert is True):
