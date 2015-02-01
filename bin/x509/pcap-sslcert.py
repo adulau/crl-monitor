@@ -11,6 +11,11 @@ import fileinput
 import re
 import binascii
 import OpenSSL
+import argparse
+
+argParser = argparse.ArgumentParser(description='Extract certificate to PEM format from an ssldump output')
+argParser.add_argument('-r', default='-', help='Read from a file, default is stdin')
+args = argParser.parse_args()
 
 cert = None
 certstring = ""
@@ -18,7 +23,7 @@ certstring = ""
 certtag = re.compile('^\s+Certificate\s*$')
 certtagend = re.compile('^\S+')
 
-for l in fileinput.input():
+for l in fileinput.input(args.r):
     if certtag.match(l):
         cert = True
         continue
