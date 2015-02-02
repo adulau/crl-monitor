@@ -13,10 +13,12 @@ import binascii
 import OpenSSL
 import argparse
 import json
+import base64
 
 argParser = argparse.ArgumentParser(description='Extract certificate to PEM format from an ssldump output')
 argParser.add_argument('-v', default=False, action='store_true', help='Verbose output')
-argParser.add_argument('-f', default=False, action='store_true', help='Print certificate SHA1 fingerprint and destination IP addresses only')
+argParser.add_argument('-f', default=False, action='store_true', help='CSV format - IP, certificate fingerprint, CN (scans.io host format)')
+argParser.add_argument('-s', default=False, action='store_true', help='CSV format - certificate fingerprint, base64 DER encoded certificate (scans.io certs format)')
 argParser.add_argument('-j', default=False, action='store_true', help='Dump JSON object per certificate')
 argParser.add_argument('-r', default='-', help='Read from a file, default is stdin')
 args = argParser.parse_args()
@@ -61,6 +63,8 @@ for l in fileinput.input(args.r):
             print (json.dumps(c))
         elif args.f:
             print (c['dstip']+","+c['fp']+","+x509.get_subject().CN)
+        elif args.s:
+            print (c['fp']+","+base64.standard_b64encode(dercert))
         else:
             print (c['pem'])
         certstring = ""
