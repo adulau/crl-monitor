@@ -5,7 +5,7 @@
 #
 # Software is free software released under the GNU General Public License version 3 and later
 #
-# Copyright (c) 2014 Alexandre Dulaunoy - a@foo.be
+# Copyright (c) 2014-2015 Alexandre Dulaunoy - a@foo.be
 
 import fileinput
 from M2Crypto import X509
@@ -53,7 +53,7 @@ for cert in fileinput.input(args.r):
         certb = base64.b64decode(cert.split(",")[1])
     except:
         if args.v:
-            print "Padding error "+fileinput.lineno()
+            print "Padding error "+str(fileinput.lineno())
         pass
 
     if args.k:
@@ -71,7 +71,7 @@ for cert in fileinput.input(args.r):
     try:
         x509 = X509.load_cert_string(certb, X509.FORMAT_DER)
     except:
-        print "At line number "+ str(fileinput.lineno()) + " parsing error"
+        print "At line number "+str(fileinput.lineno())+" parsing error"
         pass
     subject = x509.get_subject().as_text()
     if subject is not None:
@@ -81,5 +81,3 @@ for cert in fileinput.input(args.r):
             r.sadd(fp, subject)
         else:
             sys.exit(1)
-
-
