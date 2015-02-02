@@ -15,6 +15,7 @@ import argparse
 
 argParser = argparse.ArgumentParser(description='Extract certificate to PEM format from an ssldump output')
 argParser.add_argument('-v', default=False, action='store_true', help='Verbose output')
+argParser.add_argument('-f', default=False, action='store_true', help='Print certificate SHA1 fingerprint and destination IP addresses only')
 argParser.add_argument('-r', default='-', help='Read from a file, default is stdin')
 args = argParser.parse_args()
 
@@ -53,6 +54,9 @@ for l in fileinput.input(args.r):
             print srcip+"<->"+dstip+":"+dstport
             print "Issuer: "+x509.get_issuer().CN
             print "CN: " + x509.get_subject().CN
-        print OpenSSL.crypto.dump_certificate(OpenSSL.crypto.FILETYPE_PEM, x509)
+        if not args.f:
+            print OpenSSL.crypto.dump_certificate(OpenSSL.crypto.FILETYPE_PEM, x509)
+        else:
+            print fp+","+dstip+","+x509.get_subject().CN
         certstring = ""
         y = ""
