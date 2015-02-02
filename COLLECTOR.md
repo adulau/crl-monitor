@@ -29,7 +29,7 @@ To test the parsing of the raw certificates:
 
 ~~~~
 cd ssldump
-sudo ./ssldump -ANn -i eth1 | python ../crl-monitor/bin/x509/pcal-sslcert.py -v
+sudo ./ssldump -ANn -i eth1 | python ../crl-monitor/bin/x509/pcap-sslcert.py -v
 ~~~~
 
 Feeding the certificate store:
