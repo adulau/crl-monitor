@@ -12,16 +12,18 @@ import re
 import binascii
 import OpenSSL
 import argparse
+import json
 
 argParser = argparse.ArgumentParser(description='Extract certificate to PEM format from an ssldump output')
 argParser.add_argument('-v', default=False, action='store_true', help='Verbose output')
 argParser.add_argument('-f', default=False, action='store_true', help='Print certificate SHA1 fingerprint and destination IP addresses only')
+argParser.add_argument('-j', default=False, action='store_true', help='Dump JSON object per certificate')
 argParser.add_argument('-r', default='-', help='Read from a file, default is stdin')
 args = argParser.parse_args()
 
 cert = None
 certstring = ""
-
+c = {}
 certtag = re.compile('^\s+Certificate\s*$')
 certtagend = re.compile('^\S+')
 ipv4re = '\d+\.\d+\.\d+\.\d+'
@@ -36,10 +38,10 @@ for l in fileinput.input(args.r):
     if flow.search(l):
         m = flow.match(l)
         if m is not None:
-            session = m.group(1)
-            srcip = m.group(2)
-            dstip = m.group(3)
-            dstport = m.group(4)
+            c['session'] = m.group(1)
+            c['srcip'] = m.group(2)
+            c['dstip'] = m.group(3)
+            c['dstport'] = m.group(4)
 
     if (cert is True):
         certstring += l.rstrip('\n')
@@ -49,14 +51,17 @@ for l in fileinput.input(args.r):
         a = y[1].split('certificate')[0]
         dercert = binascii.unhexlify(a)
         x509 = OpenSSL.crypto.load_certificate(OpenSSL.crypto.FILETYPE_ASN1, dercert)
-        fp = x509.digest('sha1').replace(':','').lower()
+        c['fp'] = x509.digest('sha1').replace(':','').lower()
         if args.v:
-            print srcip+"<->"+dstip+":"+dstport
+            print "("+c['session']+") "+c['srcip']+"<->"+c['dstip']+":"+c['dstport']
             print "Issuer: "+x509.get_issuer().CN
             print "CN: " + x509.get_subject().CN
-        if not args.f:
-            print OpenSSL.crypto.dump_certificate(OpenSSL.crypto.FILETYPE_PEM, x509)
+        c['pem'] = OpenSSL.crypto.dump_certificate(OpenSSL.crypto.FILETYPE_PEM, x509)
+        if args.j:
+            print (json.dumps(c))
+        elif args.f:
+            print (c['fp']+","+c['dstip']+","+x509.get_subject().CN)
         else:
-            print fp+","+dstip+","+x509.get_subject().CN
+            print (c['pem'])
         certstring = ""
         y = ""
