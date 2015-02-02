@@ -60,7 +60,7 @@ for l in fileinput.input(args.r):
         if args.j:
             print (json.dumps(c))
         elif args.f:
-            print (c['fp']+","+c['dstip']+","+x509.get_subject().CN)
+            print (c['dstip']+","+c['fp']+","+x509.get_subject().CN)
         else:
             print (c['pem'])
         certstring = ""
