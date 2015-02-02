@@ -66,3 +66,14 @@ python ./bin/x509/ip-ssl-subject.py -s 199.16.156.0/28 -p 6381
  C=US, ST=California, L=San Francisco, O=Twitter, Inc., OU=Twitter Security, CN=support.twitter.com
  C=US, O=VeriSign, Inc., OU=VeriSign Trust Network, OU=Terms of use at https://www.verisign.com/rpa (c)10, CN=VeriSign Class 3 Secure Server CA - G3
 ~~~~
+
+## Data store format
+
+~~~~
+{IPv4} -> set of {SHA1 FP}
+{SHA1 FP} -> set of {Subject}
+~~~~
+
+~~~~
+{s:SHA1 FP} -> set of {IPv4}
+~~~~
