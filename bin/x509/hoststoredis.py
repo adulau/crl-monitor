@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-# Tool to dump IP,FP into a Redis database
+# Tool to dump IP,set(FP) and FP,set(IP) into a Redis database
 #
 # Software is free software released under the GNU General Public License version 3 and later
 #
-# Copyright (c) 2014 Alexandre Dulaunoy - a@foo.be
+# Copyright (c) 2015 Alexandre Dulaunoy - a@foo.be
 
 import fileinput
 import argparse
@@ -22,7 +22,6 @@ args = argParser.parse_args()
 
 if args.s:
     try:
-        #Redis structure Set of (FP) per IP
         r = redis.StrictRedis(host=args.b, port=args.p)
     except:
         print "Unable to connect to the Redis server"
@@ -31,6 +30,8 @@ if args.s:
 for l in fileinput.input(args.r):
     (ip, fp) = l.split(',')
     if args.s:
-        r.sadd(ip, fp.rstrip())
+        cfp = fp.rstrip()
+        r.sadd(ip, cfp)
+        r.sadd("s:"+cfp, ip)
     else:
         sys.exit(1)
