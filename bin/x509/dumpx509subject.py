@@ -32,7 +32,21 @@ argParser.add_argument('-v', action='store_true', help='Verbose output')
 argParser.add_argument('-k', default=False, action='store_true', help='Add certificate to keystore')
 argParser.add_argument('-d', default=None, help='Certificate directory')
 argParser.add_argument('-r', default='-', help='Read from a file, default is stdin')
+argParser.add_argument('-i', default=False, action='store_true', help='Enable full-text indexing (default is disabled)')
 args = argParser.parse_args()
+
+if args.i:
+    from whoosh.index import create_in, exists_in, open_dir
+    from whoosh.fields import *
+    schema = Schema(path=ID(stored=True,unique=True), content=TEXT)
+    indexpath = '/tmp/findex'
+    if not os.path.exists(indexpath):
+        os.mkdir(indexpath)
+    if not exists_in(indexpath):
+        ix = create_in(indexpath, schema)
+    else:
+        ix = open_dir(indexpath)
+    writer = ix.writer()
 
 if args.s:
     try:
@@ -60,13 +74,13 @@ for cert in fileinput.input(args.r):
         p = args.d + "/" + bpath(ha=fp)
         if not os.path.exists(p):
             os.makedirs(p)
-        fn = os.path.join(p,fp)
+        fn = os.path.join(p, fp)
         if not os.path.exists(fn):
             f = open(fn, 'w+')
             f.write(certb)
             f.close()
             if args.v:
-                print "Certificate saved in " +fn
+                print "Certificate saved in "+fn
 
     try:
         x509 = X509.load_cert_string(certb, X509.FORMAT_DER)
@@ -74,10 +88,16 @@ for cert in fileinput.input(args.r):
         print "At line number "+str(fileinput.lineno())+" parsing error"
         pass
     subject = x509.get_subject().as_text()
+    issuer = x509.get_issuer().as_text()
     if subject is not None:
         if not args.s:
-            print fp +","+ subject
+            print fp+","+subject
+            if args.i:
+                 writer.update_document(path=unicode(fp), content=unicode(subject)+" "+unicode(issuer))
         elif args.s:
             r.sadd(fp, subject)
         else:
             sys.exit(1)
+
+if args.i:
+    writer.commit()
