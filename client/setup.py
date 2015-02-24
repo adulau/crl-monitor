@@ -4,11 +4,11 @@ from setuptools import setup
 
 setup(
     name='pypssl',
-    version='1.0',
+    version='1.0.1',
     author='Raphaël Vinot',
     author_email='raphael.vinot@circl.lu',
     maintainer='Raphaël Vinot',
-    url='https://github.com/CIRCL/PyPSSL',
+    url='https://github.com/adulau/crl-monitor/tree/master/client',
     description='Python API for PSSL.',
     long_description=open('README.md').read(),
     packages=['pypssl'],
@@ -23,4 +23,5 @@ setup(
         'Topic :: Internet',
     ],
     install_requires=['requests'],
+    package_data={'': ['*.md', '*.rst', 'LICENSE']},
 )
