@@ -50,14 +50,25 @@ for l in fileinput.input(args.r):
 
     if ((cert is None) and (len(certstring) > 0)):
         y = re.sub(" ", "", certstring).split('=')
-        a = y[1].split('certificate')[0]
-        dercert = binascii.unhexlify(a)
+        a = y[2].split('certificate')[0]
+        try:
+            dercert = binascii.unhexlify(a)
+        except TypeError:
+            continue
         x509 = OpenSSL.crypto.load_certificate(OpenSSL.crypto.FILETYPE_ASN1, dercert)
         c['fp'] = x509.digest('sha1').replace(':','').lower()
         if args.v:
             print "("+c['session']+") "+c['srcip']+"<->"+c['dstip']+":"+c['dstport']
-            print "Issuer: "+x509.get_issuer().CN
-            print "CN: " + x509.get_subject().CN
+            Issuer = x509.get_issuer().CN
+            if Issuer is not None:
+                print "Issuer: "+ Issuer
+            else:
+                print "Issuer: None"
+            CN = x509.get_subject().CN
+            if CN is not None:
+                print "CN: "+ CN
+            else:
+                print "Issuer: None"
         c['pem'] = OpenSSL.crypto.dump_certificate(OpenSSL.crypto.FILETYPE_PEM, x509)
         if args.j:
             print (json.dumps(c))
