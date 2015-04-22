@@ -50,7 +50,7 @@ for l in fileinput.input(args.r):
 
     if ((cert is None) and (len(certstring) > 0)):
         y = re.sub(" ", "", certstring).split('=')
-        a = y[2].split('certificate')[0]
+        a = y[1].split('certificate')[0]
         try:
             dercert = binascii.unhexlify(a)
         except TypeError:
