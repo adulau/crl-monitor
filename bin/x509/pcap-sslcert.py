@@ -76,7 +76,7 @@ for l in fileinput.input(args.r):
             subject = x509.get_subject().CN
             if subject is None:
                 subject = ""
-            print (c['dstip']+","+c['fp']+","+subject
+            print (c['dstip']+","+c['fp']+","+subject)
         elif args.s:
             print (c['fp']+","+base64.standard_b64encode(dercert))
         else:
