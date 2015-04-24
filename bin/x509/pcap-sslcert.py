@@ -55,7 +55,11 @@ for l in fileinput.input(args.r):
             dercert = binascii.unhexlify(a)
         except TypeError:
             continue
-        x509 = OpenSSL.crypto.load_certificate(OpenSSL.crypto.FILETYPE_ASN1, dercert)
+        try:
+            x509 = OpenSSL.crypto.load_certificate(OpenSSL.crypto.FILETYPE_ASN1, dercert)
+        except OpenSSL.crypto.Error:
+            continue
+
         c['fp'] = x509.digest('sha1').replace(':','').lower()
         if args.v:
             print "("+c['session']+") "+c['srcip']+"<->"+c['dstip']+":"+c['dstport']
