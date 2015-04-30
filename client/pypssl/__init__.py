@@ -1,1 +1,1 @@
-from api import PyPSSL
+from .api import PyPSSL
