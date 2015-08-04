@@ -22,7 +22,7 @@ This command parses all the certificates and extract the subjects and  imports t
 Then you need to import the mapping between scanned IP addresses and the fingerprint of the X.509 certificate seen:
 
 ~~~~
-zcat ./scans-io/data/20141208_hosts.gz | python hoststoredis.py -p 6381
+zcat ./scans-io/data/20141208_hosts.gz | python hoststoredis.py -p 6381 -s
 ~~~~
 
 The above procedure can be repeated with additional scans or you can import multiple scans in parallel using GNU Parallel.
