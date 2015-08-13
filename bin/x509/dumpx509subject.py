@@ -75,12 +75,17 @@ for cert in fileinput.input(args.r):
         if not os.path.exists(p):
             os.makedirs(p)
         fn = os.path.join(p, fp)
-        if not os.path.exists(fn):
+        if args.v:
+	    print (fn)
+	if not os.path.exists(fn):
             f = open(fn, 'w+')
             f.write(certb)
             f.close()
             if args.v:
                 print "Certificate saved in "+fn
+	else:
+	    if args.v:
+		print fn + " certificate already stored"
 
     try:
         x509 = X509.load_cert_string(certb, X509.FORMAT_DER)
@@ -95,7 +100,8 @@ for cert in fileinput.input(args.r):
             if args.i:
                  writer.update_document(path=unicode(fp), content=unicode(subject)+" "+unicode(issuer))
         elif args.s:
-            r.sadd(fp, subject)
+            print (fp)
+	    r.sadd(fp, subject)
         else:
             sys.exit(1)
 
