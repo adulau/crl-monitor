@@ -32,6 +32,13 @@ cd ssldump
 sudo ./ssldump -ANn -i eth1 | python ../crl-monitor/bin/x509/pcap-sslcert.py -v
 ~~~~
 
+To dump from JSON the raw certificates:
+
+~~~~
+cd ssldump
+sudo ./ssldump -ANn -i eth1 | python ../crl-monitor/bin/x509/pcap-sslcert.py -j | jq -r .pem
+~~~~
+
 Feeding the certificate store:
 
 
