@@ -27,7 +27,7 @@ class SSLQueryHandler(tornado.web.RequestHandler):
     def get(self, input):
         try:
             #Redis structure Set of (FP) per IP
-            r = redis.StrictRedis(host='127.0.0.1', port=6381)
+            r = redis.StrictRedis(host='127.0.0.1', port=8323)
         except:
             print "Unable to connect to the Redis server"
             sys.exit(255)
@@ -57,14 +57,17 @@ class SSLQueryHandler(tornado.web.RequestHandler):
             for ip in iplist:
                 s = r.smembers(ip)
                 if s:
-                    out[str(ip)] = []
+                    out[str(ip)] = {}
+		    out[str(ip)]['certificates'] = []
+	            out[str(ip)]['subjects'] = {}
                     for fingerprint in s:
                         subjects = r.smembers(fingerprint)
+			out[str(ip)]['certificates'].append(fingerprint)
                         if subjects:
+			    out[str(ip)]['subjects'][fingerprint] = {}
+			    out[str(ip)]['subjects'][fingerprint]['values'] = []
                             for subject in subjects:
-                                    out[str(ip)].append(subject)
-                        else:
-                                out[str(ip)].append(fingerprint)
+                                    out[str(ip)]['subjects'][fingerprint]['values'].append(subject)
 
         if not self._finished:
             self.set_header('Content-Type', 'application/json')
