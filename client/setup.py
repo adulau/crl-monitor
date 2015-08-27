@@ -4,7 +4,7 @@ from setuptools import setup
 
 setup(
     name='pypssl',
-    version='2.0',
+    version='2.1',
     author='Raphaël Vinot',
     author_email='raphael.vinot@circl.lu',
     maintainer='Raphaël Vinot',
