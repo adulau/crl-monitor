@@ -130,8 +130,14 @@ class FetchCertificateHandler(tornado.web.RequestHandler):
 	try:
 	    r = redis.StrictRedis(host='127.0.0.1', port=8323)
         except:
-            print "Unable to connect to the Redis server"
+            print ("Unable to connect to the Redis server")
             sys.exit(255)
+
+	#ICSI data
+	try:
+	    ricsi = redis.StrictRedis(host='localhost', port=6380, db=5)
+	except:
+	    print ("Unable to connect to the Redis ICSI notary server")
 
 	fp = input.lower()
         if not checksha1(value=fp):
@@ -163,7 +169,9 @@ class FetchCertificateHandler(tornado.web.RequestHandler):
 
 	for i in range(0, extcount):
 		out['info']['extension'][cert.get_ext_at(i).get_name()] = cert.get_ext_at(i).get_value()
-
+	if ricsi.exists(fp):
+		icsi = ricsi.hgetall(fp)
+		out['icsi'] = icsi
 	if not self._finished:
 	    self.set_header('Content-Type', 'application/json')
             self.set_header('Server', servername)
