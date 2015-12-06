@@ -21,6 +21,7 @@ fp = '592978A72A9061F70AD7C44C4D449DCF258CD534'
 
 argParser = argparse.ArgumentParser(description='Lookup a series of certificate fingerprints ICSI Certificate Notary')
 argParser.add_argument('-r', default='-', help='Read from a file, default is stdin')
+argParser.add_argument('-v', default=False, action='store_true', help='Verbose output including ICSI output')
 args = argParser.parse_args()
 
 icsi_keys = ['version','first_seen','last_seen', 'times_seen', 'validated']
@@ -39,5 +40,5 @@ for l in fileinput.input(args.r):
 	rd = {}
 	rd = dict(token.split('=') for token in shlex.split(txt))
 	rstore.hmset(fp, rd)
-	print (rd)
-	#print ("{},{}".format(fp,r[0]))
+	if args.v:
+		print ("{},{}".format(fp,rd))
