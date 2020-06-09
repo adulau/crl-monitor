@@ -1,7 +1,7 @@
 crl-monitor
 ===========
 
-CRL Monitor - X.509 Certificate Revocation List monitoring 
+CRL Monitor - X.509 Certificate Revocation List monitoring
 
 X.509 Subject Cache
 ================
@@ -17,7 +17,7 @@ If you use the great dumps from [scans.io](https://scans.io/), you can do the fo
 zcat ./scans-io/data/20141208_certs.gz | python dumpx509subject.py -p 6381 -s
 ~~~~
 
-This command parses all the certificates and extract the subjects and  imports these into the Redis-compatible database running on TCP port 6381. 
+This command parses all the certificates and extract the subjects and  imports these into the Redis-compatible database running on TCP port 6381.
 
 Then you need to import the mapping between scanned IP addresses and the fingerprint of the X.509 certificate seen:
 
@@ -26,14 +26,14 @@ zcat ./scans-io/data/20141208_hosts.gz | python hoststoredis.py -p 6381 -s
 ~~~~
 
 The above procedure can be repeated with additional scans or you can import multiple scans in parallel using GNU Parallel.
- 
+
 IP Subnet Lookup in X.509 Subject Cache
 ================================
 
 ip-ssl-subject.py can query a network subnet and display the known certificate seen and display the X.509 subject if known.
 
 ~~~~
-python ./bin/x509/ip-ssl-subject.py -s 199.16.156.0/28 -p 6381
+python ./server/ip-ssl-subject-api.py -s 199.16.156.0/28 -p 6381
 ~~~~
 
 ~~~~
