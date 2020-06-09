@@ -80,7 +80,7 @@ class SSLQueryHandler(tornado.web.RequestHandler):
                 if not self._finished:
                     self.finish()
             for ip in iplist:
-                s = r.smembers(ip)
+                s = r.smembers(str(ip))
                 if s:
                     out[str(ip)] = {}
 		    out[str(ip)]['certificates'] = []
