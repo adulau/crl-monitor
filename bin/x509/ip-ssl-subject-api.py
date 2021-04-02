@@ -168,7 +168,10 @@ class FetchCertificateHandler(tornado.web.RequestHandler):
         extcount = cert.get_ext_count()
 
 	for i in range(0, extcount):
-		out['info']['extension'][cert.get_ext_at(i).get_name()] = cert.get_ext_at(i).get_value()
+	        try:
+                        out['info']['extension'][cert.get_ext_at(i).get_name()] = cert.get_ext_at(i).get_value()
+	        except:
+                        pass
 	if ricsi.exists(fp):
 		icsi = ricsi.hgetall(fp)
 		out['icsi'] = icsi
