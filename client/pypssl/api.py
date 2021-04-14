@@ -26,8 +26,8 @@ class PyPSSL(object):
             # No authentication defined.
             pass
 
-    def _query(self, url):
-        response = self.session.get(url)
+    def _query(self, url, timeout=None):
+        response = self.session.get(url, timeout=timeout)
         try:
             return response.json()
         except:
@@ -47,7 +47,7 @@ class PyPSSL(object):
             return {'error': 'Incorrect format'}
         return None
 
-    def query(self, q):
+    def query(self, q, timeout=None):
         check = self._check_IP(q)
         if check is not None:
             return check
@@ -55,19 +55,19 @@ class PyPSSL(object):
             path = 'pssl/query/{}'.format(q)
         else:
             path = 'v2pssl/query/{}'.format(q)
-        return self._query(urljoin(self.base_url, path))
+        return self._query(urljoin(self.base_url, path), timeout=timeout)
 
-    def query_cert(self, q):
+    def query_cert(self, q, timeout=None):
         if self.api_version != 2:
             return {'error': 'Only available in API v2'}
         path = 'v2pssl/cquery/{}'.format(q)
-        return self._query(urljoin(self.base_url, path))
+        return self._query(urljoin(self.base_url, path), timeout=timeout)
 
-    def fetch_cert(self, q, make_datetime=True):
+    def fetch_cert(self, q, make_datetime=True, timeout=None):
         if self.api_version != 2:
             return {'error': 'Only available in API v2'}
         path = 'v2pssl/cfetch/{}'.format(q)
-        response = self._query(urljoin(self.base_url, path))
+        response = self._query(urljoin(self.base_url, path), timeout=timeout)
         if response.get('error') or not make_datetime:
             return response
         # create python datetime, doesn't return a json object
