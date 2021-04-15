@@ -22,7 +22,7 @@ classifiers = [
 ]
 
 [tool.poetry.scripts]
-pypssl = "bin.pypssl:main"
+pssl = "bin.pssl:main"
 
 [tool.poetry.dependencies]
 python = "^3.6"
