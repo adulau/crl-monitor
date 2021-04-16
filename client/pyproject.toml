@@ -1,0 +1,36 @@
+[tool.poetry]
+name = "pypssl"
+version = "2.2"
+description = "Python API for PSSL."
+authors = ["Raphaël Vinot <raphael.vinot@circl.lu>"]
+license = "GPLv3"
+
+repository = "https://github.com/adulau/crl-monitor/tree/master/client"
+
+readme = "README.md"
+
+classifiers = [
+    'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
+    'Development Status :: 5 - Production/Stable',
+    'Environment :: Console',
+    'Intended Audience :: Science/Research',
+    'Intended Audience :: Telecommunications Industry',
+    'Programming Language :: Python :: 2.7',
+    'Programming Language :: Python :: 3',
+    'Topic :: Security',
+    'Topic :: Internet',
+]
+
+[tool.poetry.scripts]
+pssl = "bin.pssl:main"
+
+[tool.poetry.dependencies]
+python = "^3.6"
+requests = "^2.25.1"
+python-dateutil = "^2.8.1"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

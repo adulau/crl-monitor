@@ -6,7 +6,7 @@ import pypssl
 import json
 
 
-if __name__ == '__main__':
+def main():
     parser = argparse.ArgumentParser(description='Query a Passive SSL instance.')
     parser.add_argument("--url", default='https://www.circl.lu/', help='URL where the passive SSL is running (no path).')
     parser.add_argument("-v", "--version", type=int, default=2, help='URL where the passive SSL is running (no path).')
@@ -28,3 +28,7 @@ if __name__ == '__main__':
         print(json.dumps(p.fetch_cert(args.fetch, make_datetime=False)))
     else:
         print('You didn\'t query anything...')
+
+
+if __name__ == '__main__':
+    main()
