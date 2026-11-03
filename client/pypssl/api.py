@@ -3,10 +3,7 @@
 
 import requests
 import socket
-try:
-    from urllib.parse import urljoin
-except ImportError:
-    from urlparse import urljoin
+from urllib.parse import urljoin
 import dateutil.parser
 
 
